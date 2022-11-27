@@ -1,0 +1,91 @@
+!
+hostname Main-R
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.40.1 255.255.255.128
+!
+interface FastEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.40.129 255.255.255.240
+!
+interface FastEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.40.145 255.255.255.248
+!
+interface FastEthernet0/0.40
+ encapsulation dot1Q 40
+ ip address 192.168.40.153 255.255.255.252
+!
+interface FastEthernet0/1
+ ip address 172.16.1.1 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 192.168.40.0 0.0.0.127 area 0
+ network 192.168.40.128 0.0.0.15 area 0
+ network 192.168.40.144 0.0.0.7 area 0
+ network 192.168.40.152 0.0.0.3 area 0
+ network 172.16.1.0 0.0.0.3 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+!
+no cdp run
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
