@@ -1,0 +1,114 @@
+           1 - We have to read the requerment clearly and buld it.
+
+           2 - Make sure that all lights are ON.
+
+           3 - configuare the basic configuration of the devices.
+               - Hostname.
+               - banner message 
+               - line console and vty password.
+
+en
+conf t
+hostname F4-R
+banner motd #This is a F4-R#
+
+line consol 0
+password 123
+Login  
+Exit
+
+enable password 1234
+service password-encryption 
+Do wr
+ 
+
+               - ssh configuration on the routers and L3SW.
+  
+ip  domain-name Cisco.net
+username hussein password 12345
+crypto key generate rsa
+1024
+line vty 0 15
+password 123456
+login  
+transport input ssh 
+exit
+
+            3 - configuare Vlans to all SWs,
+                      trunk between L2 SWs and Routers.
+                      Access between L2 SWs and End users.
+ 
+
+int ra fa 0/1
+switchport mode trunk
+exit
+
+vlan 10
+name Rec
+exit
+
+in ra fa 0/2-3
+switchport mode access
+switchport access vlan 10
+do wr
+
+
+
+                4 - assign IPs to Routers.
+ 
+               int se 0/2/0
+               Clock rate 64000
+               ip add 10.10.10.33 255.255.255.252
+
+
+
+               5 - Ospf Configuration on the routers.
+   router ospf 10
+   network 10.10.10.0 0.0.0.3 area 0
+   network 10.10.10.4 0.0.0.3 area 0
+   network 10.10.10.16 0.0.0.3 area 0
+   ...
+   ..
+ 
+
+
+               7 - DHCP Servers..
+
+ip dhcp pool HR-pool
+network 192.168.7.0 255.255.255.0 
+default-router 192.168.7.1 
+dns-server  8.8.8.8
+ip dhcp excluded-address 192.168.7.1 
+
+    Show ip Dhcp binding
+    
+               8 - Inter-Vlan routing on Routers (Router on a stick).
+
+int gigabitEthernet 0/0.70
+encapsulation dot1Q 70
+ip address 192.168.7.1 255.255.255.0
+exit
+     
+  
+
+PC>ssh -l hussein 192.168.3.1
+ 
+
+          9 - port security to 3rd-switch to allow only Test-PC to access port fa0/2 
+int fa 0/2
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+ 
+    
+         10- Wireless Configuration.
+ 
+
+
+ 
+
+
+
+
