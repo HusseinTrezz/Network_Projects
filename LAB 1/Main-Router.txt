@@ -1,0 +1,89 @@
+!
+hostname Main-Router
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+!
+license udi pid CISCO2911/K9 sn FTX1524HRVW-
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ ip address 10.10.10.2 255.255.255.0
+ ip nat inside
+ duplex auto
+ speed auto
+ standby 1 ip 10.10.10.1
+ standby 1 priority 120
+ standby 1 preempt
+!
+interface GigabitEthernet0/1
+ description to-2nd-Company
+ ip address 50.10.10.1 255.255.255.224
+ ip nat outside
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/2
+ no ip address
+ duplex auto
+ speed auto
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router ospf 1
+ log-adjacency-changes
+ network 10.10.10.0 0.0.0.255 area 0
+ network 50.10.10.0 0.0.0.31 area 0
+!
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+ip classless
+!
+ip flow-export version 9
+!
+!
+access-list 1 permit 10.10.10.0 0.0.0.255
+!
+!
+!
+!
+!
+!
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ login
+!
+!
+!
+end
